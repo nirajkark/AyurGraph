@@ -1,0 +1,217 @@
+@prefix ayur: <http://example.org/ayurvedic/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ayur:Compound a rdfs:Class .
+
+ayur:Condition a rdfs:Class .
+
+ayur:Dosha a rdfs:Class .
+
+ayur:Herb a rdfs:Class .
+
+ayur:Preparation a rdfs:Class .
+
+ayur:Source a rdfs:Class .
+
+ayur:Symptom a rdfs:Class .
+
+ayur:Treatment a rdfs:Class .
+
+ayur:cmp_withanolide a ayur:Compound ;
+    rdfs:label "Withanolide" .
+
+ayur:description a rdf:Property .
+
+ayur:h_arjuna a ayur:Herb ;
+    rdfs:label "Arjuna" ;
+    ayur:description "Cardiac supportive herb in classical texts." ;
+    ayur:recommendedFor ayur:c_diabetes .
+
+ayur:h_ashwagandha a ayur:Herb ;
+    rdfs:label "Ashwagandha" ;
+    ayur:balancesDosha ayur:d_vata ;
+    ayur:description "Adaptogen used for stress, fatigue and vitality." ;
+    ayur:recommendedFor ayur:c_anxiety .
+
+ayur:h_brahmi a ayur:Herb ;
+    rdfs:label "Brahmi" ;
+    ayur:description "Traditionally used for memory and cognition." ;
+    ayur:recommendedFor ayur:c_memory_loss .
+
+ayur:h_clove a ayur:Herb ;
+    rdfs:label "Clove" ;
+    ayur:description "Used for dental pain and as a carminative." ;
+    ayur:recommendedFor ayur:c_common_cold .
+
+ayur:h_guduchi a ayur:Herb ;
+    rdfs:label "Guduchi" ;
+    ayur:balancesDosha ayur:d_kapha ;
+    ayur:description "Used as an immunomodulatory herb." ;
+    ayur:recommendedFor ayur:c_fever .
+
+ayur:h_haldi a ayur:Herb ;
+    rdfs:label "Turmeric" ;
+    ayur:description "Anti-inflammatory uses in traditional texts." ;
+    ayur:recommendedFor ayur:c_skin_allergy .
+
+ayur:h_licorice a ayur:Herb ;
+    rdfs:label "Licorice" ;
+    ayur:description "Soothing for the throat; used in some formulations." ;
+    ayur:recommendedFor ayur:c_cough .
+
+ayur:h_musta a ayur:Herb ;
+    rdfs:label "Musta" ;
+    ayur:description "Used for digestive disorders." ;
+    ayur:recommendedFor ayur:c_diarrhea .
+
+ayur:h_neem a ayur:Herb ;
+    rdfs:label "Neem" ;
+    ayur:description "Used for skin problems and as an antiseptic." ;
+    ayur:recommendedFor ayur:c_skin_allergy .
+
+ayur:h_saffron a ayur:Herb ;
+    rdfs:label "Saffron" ;
+    ayur:description "Used in small quantities for mood and complexion." ;
+    ayur:recommendedFor ayur:c_insomnia .
+
+ayur:h_shatavari a ayur:Herb ;
+    rdfs:label "Shatavari" ;
+    ayur:description "Used in female reproductive health and vitality." ;
+    ayur:recommendedFor ayur:c_indigestion .
+
+ayur:prep_oleation a ayur:Preparation ;
+    rdfs:label "Oleation (Snehana)" .
+
+ayur:s_bloating a ayur:Symptom ;
+    rdfs:label "Bloating" .
+
+ayur:s_fatigue a ayur:Symptom ;
+    rdfs:label "Fatigue" .
+
+ayur:s_forgetfulness a ayur:Symptom ;
+    rdfs:label "Forgetfulness" .
+
+ayur:s_insomnia a ayur:Symptom ;
+    rdfs:label "Insomnia" .
+
+ayur:source_bhavaprakasha a ayur:Source ;
+    rdfs:label "Bhavaprakasha" .
+
+ayur:t_detox_drink a ayur:Treatment ;
+    rdfs:label "Detox Drink" ;
+    ayur:containsHerb ayur:h_triphala ;
+    ayur:description "Formulated drinks for cleansing." ;
+    ayur:treats ayur:c_fatigue .
+
+ayur:t_herbal_tea a ayur:Treatment ;
+    rdfs:label "Herbal Tea" ;
+    ayur:containsHerb ayur:h_cardamom,
+        ayur:h_tulsi ;
+    ayur:description "Infusion/tea containing specific herbs." ;
+    ayur:treats ayur:c_common_cold .
+
+ayur:t_meditation a ayur:Treatment ;
+    rdfs:label "Meditation" ;
+    ayur:description "Mind-body practice." ;
+    ayur:treats ayur:c_anxiety .
+
+ayur:t_oil_therapy a ayur:Treatment ;
+    rdfs:label "Oil Therapy" ;
+    ayur:containsHerb ayur:h_guggulu ;
+    ayur:description "Topical oil application or massage." ;
+    ayur:treats ayur:c_arthritis .
+
+ayur:t_panchakarma a ayur:Treatment ;
+    rdfs:label "Panchakarma" ;
+    ayur:description "Cleansing therapies." .
+
+ayur:c_arthritis a ayur:Condition ;
+    rdfs:label "Arthritis" ;
+    ayur:description "Condition: Arthritis" ;
+    ayur:hasSymptom ayur:s_joint_pain .
+
+ayur:c_diabetes a ayur:Condition ;
+    rdfs:label "Diabetes" ;
+    ayur:description "Condition: Diabetes" .
+
+ayur:c_diarrhea a ayur:Condition ;
+    rdfs:label "Diarrhea" ;
+    ayur:description "Condition: Diarrhea" .
+
+ayur:c_fever a ayur:Condition ;
+    rdfs:label "Fever" ;
+    ayur:description "Condition: Fever" ;
+    ayur:hasSymptom ayur:s_fever .
+
+ayur:c_insomnia a ayur:Condition ;
+    rdfs:label "Insomnia" ;
+    ayur:description "Condition: Insomnia" .
+
+ayur:c_memory_loss a ayur:Condition ;
+    rdfs:label "Memory Loss" ;
+    ayur:description "Condition: Memory Loss" .
+
+ayur:d_pitta a ayur:Dosha ;
+    rdfs:label "Pitta" .
+
+ayur:h_cardamom a ayur:Herb ;
+    rdfs:label "Cardamom" ;
+    ayur:balancesDosha ayur:d_pitta ;
+    ayur:description "Digestive aid and aromatic spice." .
+
+ayur:h_guggulu a ayur:Herb ;
+    rdfs:label "Guggulu" ;
+    ayur:balancesDosha ayur:d_vata ;
+    ayur:description "Used in musculoskeletal and lipid disorders." .
+
+ayur:h_triphala a ayur:Herb ;
+    rdfs:label "Triphala" ;
+    ayur:balancesDosha ayur:d_kapha ;
+    ayur:description "A classical formulation used for digestion and detox." ;
+    ayur:recommendedFor ayur:c_indigestion .
+
+ayur:h_tulsi a ayur:Herb ;
+    rdfs:label "Tulsi" ;
+    ayur:description "Used for respiratory complaints and general immune support." .
+
+ayur:s_cough a ayur:Symptom ;
+    rdfs:label "Cough" .
+
+ayur:s_fever a ayur:Symptom ;
+    rdfs:label "Fever" .
+
+ayur:s_joint_pain a ayur:Symptom ;
+    rdfs:label "Joint Pain" .
+
+ayur:s_rash a ayur:Symptom ;
+    rdfs:label "Rash" .
+
+ayur:s_stress a ayur:Symptom ;
+    rdfs:label "Stress" .
+
+ayur:c_anxiety a ayur:Condition ;
+    rdfs:label "Anxiety" ;
+    ayur:description "Condition: Anxiety" ;
+    ayur:hasSymptom ayur:s_stress .
+
+ayur:c_common_cold a ayur:Condition ;
+    rdfs:label "Common Cold" ;
+    ayur:description "Condition: Common Cold" ;
+    ayur:hasSymptom ayur:s_cough .
+
+ayur:c_indigestion a ayur:Condition ;
+    rdfs:label "Indigestion" ;
+    ayur:description "Condition: Indigestion" .
+
+ayur:c_skin_allergy a ayur:Condition ;
+    rdfs:label "Skin Allergy" ;
+    ayur:description "Condition: Skin Allergy" ;
+    ayur:hasSymptom ayur:s_rash .
+
+ayur:d_kapha a ayur:Dosha ;
+    rdfs:label "Kapha" .
+
+ayur:d_vata a ayur:Dosha ;
+    rdfs:label "Vata" .
+
