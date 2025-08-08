@@ -1,0 +1,7 @@
+rdflib
+sentence-transformers
+faiss-cpu
+streamlit
+openai
+numpy
+python-dotenv
