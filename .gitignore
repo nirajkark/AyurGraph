@@ -4,3 +4,4 @@ vevn/
 venv/
 /venv
 node_modules/
+.env\
