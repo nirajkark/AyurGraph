@@ -5,3 +5,10 @@ streamlit
 openai
 numpy
 python-dotenv
+flask
+flask-cors
+rdflib
+requests
+python-dotenv
+langchain-groq
+langchain

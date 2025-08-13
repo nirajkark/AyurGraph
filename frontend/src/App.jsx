@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Send, Leaf, MessageCircle, Sparkles, Clock, Bot, User, Zap, Heart } from 'lucide-react'
+import { Send, Leaf, MessageCircle, Sparkles, Clock, Bot, User, Zap, Heart, Network } from 'lucide-react'
+import { Network as VisNetwork } from 'vis-network'
+import { DataSet } from 'vis-data'
+import './styles.css'
 
 const API_URL = import.meta.env?.VITE_API_URL || 'http://127.0.0.1:5000'
 
@@ -15,8 +18,11 @@ export default function App() {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
+  const [showGraph, setShowGraph] = useState(false)
   const messagesEndRef = useRef(null)
   const inputRef = useRef(null)
+  const networkRef = useRef(null)
+  const containerRef = useRef(null)
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -29,6 +35,39 @@ export default function App() {
   useEffect(() => {
     inputRef.current?.focus()
   }, [])
+
+  useEffect(() => {
+    if (showGraph && containerRef.current && messages[messages.length - 1]?.kg_data?.visualization) {
+      const { nodes, edges } = messages[messages.length - 1].kg_data.visualization
+      const visNodes = new DataSet(nodes)
+      const visEdges = new DataSet(edges.map(edge => ({
+        ...edge,
+        arrows: 'to'
+      })))
+      const options = {
+        nodes: {
+          font: { size: 12, color: '#1e293b' },
+          borderWidth: 1,
+          shadow: true
+        },
+        edges: {
+          font: { size: 10, align: 'middle' },
+          color: '#94a3b8',
+          arrows: { to: { enabled: true, scaleFactor: 0.5 } }
+        },
+        physics: {
+          forceAtlas2Based: {
+            gravitationalConstant: -50,
+            centralGravity: 0.01,
+            springLength: 100
+          },
+          minVelocity: 0.75
+        },
+        interaction: { zoomView: true, dragView: true }
+      }
+      networkRef.current = new VisNetwork(containerRef.current, { nodes: visNodes, edges: visEdges }, options)
+    }
+  }, [showGraph, messages])
 
   const send = async () => {
     if (!input.trim() || loading) return
@@ -44,9 +83,10 @@ export default function App() {
     setInput('')
     setLoading(true)
     setIsTyping(true)
+    setShowGraph(false)
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 500)) // Simulate thinking time
+      await new Promise(resolve => setTimeout(resolve, 500))
       
       const res = await fetch(`${API_URL}/api/chat`, {
         method: 'POST',
@@ -65,7 +105,8 @@ export default function App() {
         from: 'bot', 
         text: botText, 
         timestamp: new Date(),
-        type: data.results?.length > 0 ? 'results' : 'no-results'
+        type: data.confidence === 'high' ? 'results' : 'no-results',
+        kg_data: data.kg_data
       }])
     } catch (e) {
       setMessages(m => [...m, {
@@ -81,21 +122,33 @@ export default function App() {
   }
 
   const formatResults = (data) => {
-    if (data.error) return `❌ Query Error\n\n${data.detail || data.error}\n\nTry rephrasing your question or ask about specific herbs like turmeric, ashwagandha, or neem.`
-    
-    if (data.results && data.results.length) {
-      const resultCount = data.results.length
-      const lines = data.results.map((r, idx) => {
-        const vals = Object.entries(r)
-          .map(([key, value]) => `${key}: ${value}`)
-          .join(' • ')
-        return `${idx + 1}. ${vals}`
-      })
-      
-      return `🔍 Knowledge Discovery\n\n✨ Found ${resultCount} relevant ${resultCount === 1 ? 'result' : 'results'}:\n\n${lines.join('\n\n')}\n\n📜 Query Used:\n${data.sparql}`
+    if (data.error) {
+      return `❌ Query Error\n\n${data.detail || data.error}\n\nTry rephrasing your question or ask about specific herbs like turmeric, ashwagandha, or neem.`
     }
     
-    return `🔍 Search Complete\n\nNo direct matches found in the knowledge base. This might mean:\n\n• Try different keywords (e.g., "turmeric" instead of "curcuma")\n• Ask about common conditions like "fever", "digestion", or "stress"\n• Explore popular herbs like ashwagandha, brahmi, or triphala\n\n📜 Query Used:\n${data.sparql}`
+    let responseText = data.response || 'No response available.'
+
+    if (data.kg_data && (data.kg_data.entities?.length > 0 || Object.keys(data.kg_data.relationships || {}).length > 0)) {
+      responseText += '\n\n📚 Sources from Knowledge Graph:'
+      
+      if (data.kg_data.entities?.length > 0) {
+        responseText += '\nEntities Found:'
+        data.kg_data.entities.forEach(entity => {
+          responseText += `\n- ${entity.label} (${entity.type}): ${entity.details.description?.[0] || 'No description available.'}`
+        })
+      }
+      
+      if (Object.keys(data.kg_data.relationships || {}).length > 0) {
+        responseText += '\nRelationships:'
+        Object.entries(data.kg_data.relationships).forEach(([key, items]) => {
+          responseText += `\n- ${key}: ${items.map(item => item.conditionLabel || item.herbLabel || item.label || '').join(', ')}`
+        })
+      }
+    } else {
+      responseText += '\n\nℹ️ General Ayurvedic guidance provided.'
+    }
+
+    return responseText
   }
 
   const formatTime = (timestamp) => {
@@ -137,6 +190,8 @@ export default function App() {
         return `${baseClasses} bot-message welcome-message`
       case 'results':
         return `${baseClasses} bot-message results-message`
+      case 'no-results':
+        return `${baseClasses} bot-message no-results-message`
       case 'error':
         return `${baseClasses} bot-message error-message`
       default:
@@ -153,6 +208,19 @@ export default function App() {
         <div className="floating-leaf leaf-3">🍃</div>
         <div className="floating-leaf leaf-4">🌱</div>
       </div>
+
+      {/* Graph Visualization Modal */}
+      {showGraph && (
+        <div className="graph-modal">
+          <div className="graph-modal-content">
+            <button className="graph-close-button" onClick={() => setShowGraph(false)}>
+              Close
+            </button>
+            <h3 className="graph-title">Knowledge Graph Visualization</h3>
+            <div ref={containerRef} className="graph-container" />
+          </div>
+        </div>
+      )}
 
       {/* Header Section */}
       <header className="app-header">
@@ -198,6 +266,14 @@ export default function App() {
                   <div className={getMessageStyle(message)}>
                     <div className="message-text">
                       {message.text}
+                      {message.kg_data?.visualization?.nodes?.length > 0 && (
+                        <button
+                          className="view-graph-button"
+                          onClick={() => setShowGraph(true)}
+                        >
+                          <Network size={16} /> View Knowledge Graph
+                        </button>
+                      )}
                     </div>
                     <div className="message-meta">
                       <Clock size={12} />

@@ -10,7 +10,9 @@
   "dependencies": {
     "lucide-react": "^0.539.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "vis-data": "^8.0.1",
+    "vis-network": "^10.0.1"
   },
   "devDependencies": {
     "vite": "^5.0.0"
