@@ -1,4 +1,4 @@
-```markdown
+
 # AyurGraph: Ayurvedic Knowledge Graph Chatbot
 
 AyurGraph is a web-based chatbot that leverages a knowledge graph and AI to provide insights into Ayurvedic principles, herbs, treatments, and dosha-balancing methods. The backend uses Flask and RDFLib to query a Turtle-based knowledge graph (`ayurgraph.ttl`), while the frontend, built with React and `vis-network`, visualizes the knowledge graph and handles user interactions. The Groq API powers the chatbot's responses.
