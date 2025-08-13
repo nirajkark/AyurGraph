@@ -2,216 +2,344 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
-ayur:Compound a rdfs:Class .
+# Classes
+ayur:Compound a rdfs:Class ; rdfs:label "Compound" .
+ayur:Condition a rdfs:Class ; rdfs:label "Condition" .
+ayur:Dosha a rdfs:Class ; rdfs:label "Dosha" .
+ayur:Herb a rdfs:Class ; rdfs:label "Herb" .
+ayur:Preparation a rdfs:Class ; rdfs:label "Preparation" .
+ayur:Source a rdfs:Class ; rdfs:label "Source" .
+ayur:Symptom a rdfs:Class ; rdfs:label "Symptom" .
+ayur:Treatment a rdfs:Class ; rdfs:label "Treatment" .
 
-ayur:Condition a rdfs:Class .
+# Properties
+ayur:description a rdf:Property ; rdfs:label "Description" .
+ayur:recommendedFor a rdf:Property ; rdfs:label "Recommended For" .
+ayur:balancesDosha a rdf:Property ; rdfs:label "Balances Dosha" .
+ayur:hasSymptom a rdf:Property ; rdfs:label "Has Symptom" .
+ayur:containsHerb a rdf:Property ; rdfs:label "Contains Herb" .
+ayur:treats a rdf:Property ; rdfs:label "Treats" .
 
-ayur:Dosha a rdfs:Class .
-
-ayur:Herb a rdfs:Class .
-
-ayur:Preparation a rdfs:Class .
-
-ayur:Source a rdfs:Class .
-
-ayur:Symptom a rdfs:Class .
-
-ayur:Treatment a rdfs:Class .
-
+# Compounds
 ayur:cmp_withanolide a ayur:Compound ;
-    rdfs:label "Withanolide" .
+    rdfs:label "Withanolide" ;
+    ayur:description "A class of naturally occurring steroids found in Ashwagandha." .
 
-ayur:description a rdf:Property .
-
+# Herbs
 ayur:h_arjuna a ayur:Herb ;
     rdfs:label "Arjuna" ;
-    ayur:description "Cardiac supportive herb in classical texts." ;
-    ayur:recommendedFor ayur:c_diabetes .
+    ayur:description "Cardiac supportive herb used in classical Ayurvedic texts." ;
+    ayur:recommendedFor ayur:c_diabetes, ayur:c_heart_disease .
 
 ayur:h_ashwagandha a ayur:Herb ;
     rdfs:label "Ashwagandha" ;
-    ayur:balancesDosha ayur:d_vata ;
-    ayur:description "Adaptogen used for stress, fatigue and vitality." ;
-    ayur:recommendedFor ayur:c_anxiety .
+    ayur:balancesDosha ayur:d_vata, ayur:d_kapha ;
+    ayur:description "Adaptogen used for stress, fatigue, and vitality." ;
+    ayur:recommendedFor ayur:c_anxiety, ayur:c_insomnia .
 
 ayur:h_brahmi a ayur:Herb ;
     rdfs:label "Brahmi" ;
-    ayur:description "Traditionally used for memory and cognition." ;
-    ayur:recommendedFor ayur:c_memory_loss .
+    ayur:description "Traditionally used for memory and cognition enhancement." ;
+    ayur:recommendedFor ayur:c_memory_loss, ayur:c_anxiety .
 
 ayur:h_clove a ayur:Herb ;
     rdfs:label "Clove" ;
     ayur:description "Used for dental pain and as a carminative." ;
-    ayur:recommendedFor ayur:c_common_cold .
+    ayur:recommendedFor ayur:c_common_cold, ayur:c_toothache .
 
 ayur:h_guduchi a ayur:Herb ;
     rdfs:label "Guduchi" ;
-    ayur:balancesDosha ayur:d_kapha ;
-    ayur:description "Used as an immunomodulatory herb." ;
-    ayur:recommendedFor ayur:c_fever .
+    ayur:balancesDosha ayur:d_kapha, ayur:d_pitta ;
+    ayur:description "Immunomodulatory herb used for fever and detoxification." ;
+    ayur:recommendedFor ayur:c_fever, ayur:c_immune_weakness .
 
 ayur:h_haldi a ayur:Herb ;
     rdfs:label "Turmeric" ;
-    ayur:description "Anti-inflammatory uses in traditional texts." ;
-    ayur:recommendedFor ayur:c_skin_allergy .
+    ayur:balancesDosha ayur:d_kapha, ayur:d_pitta ;
+    ayur:description "Anti-inflammatory herb used in traditional texts." ;
+    ayur:recommendedFor ayur:c_skin_allergy, ayur:c_arthritis .
 
 ayur:h_licorice a ayur:Herb ;
     rdfs:label "Licorice" ;
-    ayur:description "Soothing for the throat; used in some formulations." ;
-    ayur:recommendedFor ayur:c_cough .
+    ayur:description "Soothing herb for throat and digestive issues." ;
+    ayur:recommendedFor ayur:c_cough, ayur:c_indigestion .
 
 ayur:h_musta a ayur:Herb ;
     rdfs:label "Musta" ;
-    ayur:description "Used for digestive disorders." ;
-    ayur:recommendedFor ayur:c_diarrhea .
+    ayur:description "Used for digestive disorders and fever." ;
+    ayur:recommendedFor ayur:c_diarrhea, ayur:c_fever .
 
 ayur:h_neem a ayur:Herb ;
     rdfs:label "Neem" ;
     ayur:description "Used for skin problems and as an antiseptic." ;
-    ayur:recommendedFor ayur:c_skin_allergy .
+    ayur:recommendedFor ayur:c_skin_allergy, ayur:c_acne .
 
 ayur:h_saffron a ayur:Herb ;
     rdfs:label "Saffron" ;
     ayur:description "Used in small quantities for mood and complexion." ;
-    ayur:recommendedFor ayur:c_insomnia .
+    ayur:recommendedFor ayur:c_insomnia, ayur:c_depression .
 
 ayur:h_shatavari a ayur:Herb ;
     rdfs:label "Shatavari" ;
     ayur:description "Used in female reproductive health and vitality." ;
-    ayur:recommendedFor ayur:c_indigestion .
-
-ayur:prep_oleation a ayur:Preparation ;
-    rdfs:label "Oleation (Snehana)" .
-
-ayur:s_bloating a ayur:Symptom ;
-    rdfs:label "Bloating" .
-
-ayur:s_fatigue a ayur:Symptom ;
-    rdfs:label "Fatigue" .
-
-ayur:s_forgetfulness a ayur:Symptom ;
-    rdfs:label "Forgetfulness" .
-
-ayur:s_insomnia a ayur:Symptom ;
-    rdfs:label "Insomnia" .
-
-ayur:source_bhavaprakasha a ayur:Source ;
-    rdfs:label "Bhavaprakasha" .
-
-ayur:t_detox_drink a ayur:Treatment ;
-    rdfs:label "Detox Drink" ;
-    ayur:containsHerb ayur:h_triphala ;
-    ayur:description "Formulated drinks for cleansing." ;
-    ayur:treats ayur:c_fatigue .
-
-ayur:t_herbal_tea a ayur:Treatment ;
-    rdfs:label "Herbal Tea" ;
-    ayur:containsHerb ayur:h_cardamom,
-        ayur:h_tulsi ;
-    ayur:description "Infusion/tea containing specific herbs." ;
-    ayur:treats ayur:c_common_cold .
-
-ayur:t_meditation a ayur:Treatment ;
-    rdfs:label "Meditation" ;
-    ayur:description "Mind-body practice." ;
-    ayur:treats ayur:c_anxiety .
-
-ayur:t_oil_therapy a ayur:Treatment ;
-    rdfs:label "Oil Therapy" ;
-    ayur:containsHerb ayur:h_guggulu ;
-    ayur:description "Topical oil application or massage." ;
-    ayur:treats ayur:c_arthritis .
-
-ayur:t_panchakarma a ayur:Treatment ;
-    rdfs:label "Panchakarma" ;
-    ayur:description "Cleansing therapies." .
-
-ayur:c_arthritis a ayur:Condition ;
-    rdfs:label "Arthritis" ;
-    ayur:description "Condition: Arthritis" ;
-    ayur:hasSymptom ayur:s_joint_pain .
-
-ayur:c_diabetes a ayur:Condition ;
-    rdfs:label "Diabetes" ;
-    ayur:description "Condition: Diabetes" .
-
-ayur:c_diarrhea a ayur:Condition ;
-    rdfs:label "Diarrhea" ;
-    ayur:description "Condition: Diarrhea" .
-
-ayur:c_fever a ayur:Condition ;
-    rdfs:label "Fever" ;
-    ayur:description "Condition: Fever" ;
-    ayur:hasSymptom ayur:s_fever .
-
-ayur:c_insomnia a ayur:Condition ;
-    rdfs:label "Insomnia" ;
-    ayur:description "Condition: Insomnia" .
-
-ayur:c_memory_loss a ayur:Condition ;
-    rdfs:label "Memory Loss" ;
-    ayur:description "Condition: Memory Loss" .
-
-ayur:d_pitta a ayur:Dosha ;
-    rdfs:label "Pitta" .
+    ayur:recommendedFor ayur:c_indigestion, ayur:c_menstrual_irregularity .
 
 ayur:h_cardamom a ayur:Herb ;
     rdfs:label "Cardamom" ;
-    ayur:balancesDosha ayur:d_pitta ;
-    ayur:description "Digestive aid and aromatic spice." .
+    ayur:balancesDosha ayur:d_pitta, ayur:d_kapha ;
+    ayur:description "Digestive aid and aromatic spice." ;
+    ayur:recommendedFor ayur:c_indigestion, ayur:c_bloating .
 
 ayur:h_guggulu a ayur:Herb ;
     rdfs:label "Guggulu" ;
-    ayur:balancesDosha ayur:d_vata ;
-    ayur:description "Used in musculoskeletal and lipid disorders." .
+    ayur:balancesDosha ayur:d_vata, ayur:d_kapha ;
+    ayur:description "Used in musculoskeletal and lipid disorders." ;
+    ayur:recommendedFor ayur:c_arthritis, ayur:c_obesity .
 
 ayur:h_triphala a ayur:Herb ;
     rdfs:label "Triphala" ;
-    ayur:balancesDosha ayur:d_kapha ;
-    ayur:description "A classical formulation used for digestion and detox." ;
-    ayur:recommendedFor ayur:c_indigestion .
+    ayur:balancesDosha ayur:d_kapha, ayur:d_vata, ayur:d_pitta ;
+    ayur:description "Classical formulation for digestion and detox." ;
+    ayur:recommendedFor ayur:c_indigestion, ayur:c_constipation .
 
 ayur:h_tulsi a ayur:Herb ;
     rdfs:label "Tulsi" ;
-    ayur:description "Used for respiratory complaints and general immune support." .
+    ayur:description "Used for respiratory complaints and immune support." ;
+    ayur:recommendedFor ayur:c_common_cold, ayur:c_immune_weakness .
+
+ayur:h_sesame a ayur:Herb ;
+    rdfs:label "Sesame" ;
+    ayur:balancesDosha ayur:d_vata ;
+    ayur:description "Used in oils for nourishment and lubrication." ;
+    ayur:recommendedFor ayur:c_dry_skin .
+
+# Preparations
+ayur:prep_oleation a ayur:Preparation ;
+    rdfs:label "Oleation (Snehana)" ;
+    ayur:description "Application of oil for internal or external lubrication." .
+
+ayur:prep_decoction a ayur:Preparation ;
+    rdfs:label "Decoction (Kwath)" ;
+    ayur:description "Herbal extract prepared by boiling herbs in water." .
+
+# Symptoms
+ayur:s_bloating a ayur:Symptom ;
+    rdfs:label "Bloating" ;
+    ayur:description "Abdominal discomfort due to gas or fluid retention." .
+
+ayur:s_fatigue a ayur:Symptom ;
+    rdfs:label "Fatigue" ;
+    ayur:description "Lack of energy or exhaustion." .
+
+ayur:s_forgetfulness a ayur:Symptom ;
+    rdfs:label "Forgetfulness" ;
+    ayur:description "Difficulty recalling information." .
+
+ayur:s_insomnia a ayur:Symptom ;
+    rdfs:label "Insomnia" ;
+    ayur:description "Inability to fall or stay asleep." .
 
 ayur:s_cough a ayur:Symptom ;
-    rdfs:label "Cough" .
+    rdfs:label "Cough" ;
+    ayur:description "Reflex action to clear airways." .
 
 ayur:s_fever a ayur:Symptom ;
-    rdfs:label "Fever" .
+    rdfs:label "Fever" ;
+    ayur:description "Elevated body temperature." .
 
 ayur:s_joint_pain a ayur:Symptom ;
-    rdfs:label "Joint Pain" .
+    rdfs:label "Joint Pain" ;
+    ayur:description "Discomfort or pain in joints." .
 
 ayur:s_rash a ayur:Symptom ;
-    rdfs:label "Rash" .
+    rdfs:label "Rash" ;
+    ayur:description "Skin irritation or eruption." .
 
 ayur:s_stress a ayur:Symptom ;
-    rdfs:label "Stress" .
+    rdfs:label "Stress" ;
+    ayur:description "Mental or emotional tension." .
+
+ayur:s_toothache a ayur:Symptom ;
+    rdfs:label "Toothache" ;
+    ayur:description "Pain in or around a tooth." .
+
+ayur:s_abdominal_pain a ayur:Symptom ;
+    rdfs:label "Abdominal Pain" ;
+    ayur:description "Pain in the stomach or abdominal area." .
+
+ayur:s_thirst a ayur:Symptom ;
+    rdfs:label "Excessive Thirst" ;
+    ayur:description "Persistent need to drink fluids." .
+
+ayur:s_chest_pain a ayur:Symptom ;
+    rdfs:label "Chest Pain" ;
+    ayur:description "Discomfort or pain in the chest area." .
+
+ayur:s_itching a ayur:Symptom ;
+    rdfs:label "Itching" ;
+    ayur:description "Skin irritation causing a desire to scratch." .
+
+ayur:s_inflammation a ayur:Symptom ;
+    rdfs:label "Inflammation" ;
+    ayur:description "Swelling or redness due to immune response." .
+
+ayur:s_sadness a ayur:Symptom ;
+    rdfs:label "Sadness" ;
+    ayur:description "Persistent low mood or emotional distress." .
+
+# Sources
+ayur:source_bhavaprakasha a ayur:Source ;
+    rdfs:label "Bhavaprakasha" ;
+    ayur:description "Classical Ayurvedic text on herbs and treatments." .
+
+ayur:source_charaka a ayur:Source ;
+    rdfs:label "Charaka Samhita" ;
+    ayur:description "Foundational Ayurvedic text on medicine." .
+
+# Treatments
+ayur:t_detox_drink a ayur:Treatment ;
+    rdfs:label "Detox Drink" ;
+    ayur:containsHerb ayur:h_triphala, ayur:h_guduchi ;
+    ayur:description "Formulated drinks for cleansing and detoxification." ;
+    ayur:treats ayur:c_fatigue, ayur:c_toxicity .
+
+ayur:t_herbal_tea a ayur:Treatment ;
+    rdfs:label "Herbal Tea" ;
+    ayur:containsHerb ayur:h_cardamom, ayur:h_tulsi, ayur:h_licorice ;
+    ayur:description "Infusion/tea containing specific herbs." ;
+    ayur:treats ayur:c_common_cold, ayur:c_cough .
+
+ayur:t_meditation a ayur:Treatment ;
+    rdfs:label "Meditation" ;
+    ayur:description "Mind-body practice for mental clarity and relaxation." ;
+    ayur:treats ayur:c_anxiety, ayur:c_insomnia .
+
+ayur:t_oil_therapy a ayur:Treatment ;
+    rdfs:label "Oil Therapy" ;
+    ayur:containsHerb ayur:h_guggulu, ayur:h_sesame ;
+    ayur:description "Topical oil application or massage." ;
+    ayur:treats ayur:c_arthritis, ayur:c_dry_skin .
+
+ayur:t_panchakarma a ayur:Treatment ;
+    rdfs:label "Panchakarma" ;
+    ayur:description "Cleansing therapies including vamana, virechana, etc." ;
+    ayur:treats ayur:c_toxicity, ayur:c_indigestion .
+
+# Conditions
+ayur:c_arthritis a ayur:Condition ;
+    rdfs:label "Arthritis" ;
+    ayur:description "Inflammatory joint condition causing pain and stiffness." ;
+    ayur:hasSymptom ayur:s_joint_pain, ayur:s_inflammation .
+
+ayur:c_diabetes a ayur:Condition ;
+    rdfs:label "Diabetes" ;
+    ayur:description "Metabolic disorder with elevated blood sugar levels." ;
+    ayur:hasSymptom ayur:s_fatigue, ayur:s_thirst .
+
+ayur:c_diarrhea a ayur:Condition ;
+    rdfs:label "Diarrhea" ;
+    ayur:description "Frequent loose or watery stools." ;
+    ayur:hasSymptom ayur:s_abdominal_pain .
+
+ayur:c_fever a ayur:Condition ;
+    rdfs:label "Fever" ;
+    ayur:description "Elevated body temperature due to infection or imbalance." ;
+    ayur:hasSymptom ayur:s_fever, ayur:s_fatigue .
+
+ayur:c_insomnia a ayur:Condition ;
+    rdfs:label "Insomnia" ;
+    ayur:description "Difficulty falling or staying asleep." ;
+    ayur:hasSymptom ayur:s_insomnia, ayur:s_stress .
+
+ayur:c_memory_loss a ayur:Condition ;
+    rdfs:label "Memory Loss" ;
+    ayur:description "Impaired ability to recall information." ;
+    ayur:hasSymptom ayur:s_forgetfulness .
 
 ayur:c_anxiety a ayur:Condition ;
     rdfs:label "Anxiety" ;
-    ayur:description "Condition: Anxiety" ;
-    ayur:hasSymptom ayur:s_stress .
+    ayur:description "Excessive worry or nervousness." ;
+    ayur:hasSymptom ayur:s_stress, ayur:s_insomnia .
 
 ayur:c_common_cold a ayur:Condition ;
     rdfs:label "Common Cold" ;
-    ayur:description "Condition: Common Cold" ;
-    ayur:hasSymptom ayur:s_cough .
+    ayur:description "Viral infection causing respiratory symptoms." ;
+    ayur:hasSymptom ayur:s_cough, ayur:s_fever .
 
 ayur:c_indigestion a ayur:Condition ;
     rdfs:label "Indigestion" ;
-    ayur:description "Condition: Indigestion" .
+    ayur:description "Digestive discomfort or impaired digestion." ;
+    ayur:hasSymptom ayur:s_bloating, ayur:s_abdominal_pain .
 
 ayur:c_skin_allergy a ayur:Condition ;
     rdfs:label "Skin Allergy" ;
-    ayur:description "Condition: Skin Allergy" ;
+    ayur:description "Skin reactions due to allergens or irritants." ;
+    ayur:hasSymptom ayur:s_rash, ayur:s_itching .
+
+ayur:c_heart_disease a ayur:Condition ;
+    rdfs:label "Heart Disease" ;
+    ayur:description "Cardiovascular conditions affecting heart function." ;
+    ayur:hasSymptom ayur:s_chest_pain .
+
+ayur:c_acne a ayur:Condition ;
+    rdfs:label "Acne" ;
+    ayur:description "Skin condition with pimples and inflammation." ;
     ayur:hasSymptom ayur:s_rash .
 
-ayur:d_kapha a ayur:Dosha ;
-    rdfs:label "Kapha" .
+ayur:c_immune_weakness a ayur:Condition ;
+    rdfs:label "Immune Weakness" ;
+    ayur:description "Reduced immune response leading to frequent illnesses." ;
+    ayur:hasSymptom ayur:s_fatigue .
 
+ayur:c_depression a ayur:Condition ;
+    rdfs:label "Depression" ;
+    ayur:description "Persistent low mood and lack of interest." ;
+    ayur:hasSymptom ayur:s_sadness .
+
+ayur:c_menstrual_irregularity a ayur:Condition ;
+    rdfs:label "Menstrual Irregularity" ;
+    ayur:description "Irregular or painful menstrual cycles." ;
+    ayur:hasSymptom ayur:s_abdominal_pain .
+
+ayur:c_toxicity a ayur:Condition ;
+    rdfs:label "Toxicity" ;
+    ayur:description "Accumulation of toxins causing systemic imbalance." ;
+    ayur:hasSymptom ayur:s_fatigue .
+
+ayur:c_obesity a ayur:Condition ;
+    rdfs:label "Obesity" ;
+    ayur:description "Excess body weight affecting health." ;
+    ayur:hasSymptom ayur:s_fatigue .
+
+ayur:c_dry_skin a ayur:Condition ;
+    rdfs:label "Dry Skin" ;
+    ayur:description "Lack of skin moisture causing flaking or discomfort." ;
+    ayur:hasSymptom ayur:s_itching .
+
+ayur:c_bloating a ayur:Condition ;
+    rdfs:label "Bloating" ;
+    ayur:description "Abdominal discomfort due to gas or fluid retention." ;
+    ayur:hasSymptom ayur:s_bloating .
+
+ayur:c_toothache a ayur:Condition ;
+    rdfs:label "Toothache" ;
+    ayur:description "Pain in or around a tooth." ;
+    ayur:hasSymptom ayur:s_toothache .
+
+ayur:c_constipation a ayur:Condition ;
+    rdfs:label "Constipation" ;
+    ayur:description "Difficulty in passing stools or infrequent bowel movements." ;
+    ayur:hasSymptom ayur:s_abdominal_pain .
+
+# Doshas
 ayur:d_vata a ayur:Dosha ;
-    rdfs:label "Vata" .
+    rdfs:label "Vata" ;
+    ayur:description "Dosha governing movement and nervous system." .
 
+ayur:d_pitta a ayur:Dosha ;
+    rdfs:label "Pitta" ;
+    ayur:description "Dosha governing metabolism and digestion." .
+
+ayur:d_kapha a ayur:Dosha ;
+    rdfs:label "Kapha" ;
+    ayur:description "Dosha governing structure and fluid balance." .

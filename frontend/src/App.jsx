@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Send, Leaf, MessageCircle, Sparkles, Clock, Bot, User, Zap, Heart, Network } from 'lucide-react'
 import { Network as VisNetwork } from 'vis-network'
 import { DataSet } from 'vis-data'
-import './styles.css'
 
 const API_URL = import.meta.env?.VITE_API_URL || 'http://127.0.0.1:5000'
 
@@ -19,6 +18,9 @@ export default function App() {
   const [loading, setLoading] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
   const [showGraph, setShowGraph] = useState(false)
+  const [graphType, setGraphType] = useState(null) // 'query' or 'full'
+  const [fullGraphData, setFullGraphData] = useState(null)
+  const [graphLoading, setGraphLoading] = useState(false)
   const messagesEndRef = useRef(null)
   const inputRef = useRef(null)
   const networkRef = useRef(null)
@@ -37,37 +39,111 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    if (showGraph && containerRef.current && messages[messages.length - 1]?.kg_data?.visualization) {
-      const { nodes, edges } = messages[messages.length - 1].kg_data.visualization
-      const visNodes = new DataSet(nodes)
+    if (showGraph && containerRef.current && (graphType === 'query' || graphType === 'full')) {
+      let nodes, edges;
+      if (graphType === 'full' && fullGraphData) {
+        ({ nodes, edges } = fullGraphData)
+      } else if (graphType === 'query' && messages[messages.length - 1]?.kg_data?.visualization) {
+        ({ nodes, edges } = messages[messages.length - 1].kg_data.visualization)
+      } else {
+        return
+      }
+      if (!nodes.length || !edges.length) {
+        setMessages(m => [...m, {
+          from: 'bot',
+          text: '⚠️ No data available for the knowledge graph. Please try another query or check the server logs.',
+          timestamp: new Date(),
+          type: 'error'
+        }])
+        setShowGraph(false)
+        return
+      }
+      const visNodes = new DataSet(nodes.map(node => ({
+        ...node,
+        font: { size: 12, color: '#1e293b' },
+        size: node.group === 'herbs' ? 25 : 20
+      })))
       const visEdges = new DataSet(edges.map(edge => ({
         ...edge,
-        arrows: 'to'
+        arrows: 'to',
+        color: { color: '#94a3b8' },
+        font: { size: 10, align: 'middle' }
       })))
       const options = {
         nodes: {
-          font: { size: 12, color: '#1e293b' },
           borderWidth: 1,
           shadow: true
         },
         edges: {
-          font: { size: 10, align: 'middle' },
-          color: '#94a3b8',
+          width: 2,
           arrows: { to: { enabled: true, scaleFactor: 0.5 } }
         },
         physics: {
           forceAtlas2Based: {
             gravitationalConstant: -50,
-            centralGravity: 0.01,
-            springLength: 100
+            centralGravity: 0.005,
+            springLength: 100,
+            springConstant: 0.18
           },
-          minVelocity: 0.75
+          maxVelocity: 50,
+          solver: 'forceAtlas2Based',
+          timestep: 0.35
         },
-        interaction: { zoomView: true, dragView: true }
+        interaction: { 
+          zoomView: true, 
+          dragView: true, 
+          multiselect: true,
+          hover: true
+        },
+        layout: { improvedLayout: true }
       }
-      networkRef.current = new VisNetwork(containerRef.current, { nodes: visNodes, edges: visEdges }, options)
+      try {
+        networkRef.current = new VisNetwork(containerRef.current, { nodes: visNodes, edges: visEdges }, options)
+        networkRef.current.stabilize(500)
+      } catch (e) {
+        console.error("Failed to initialize network:", e)
+        setMessages(m => [...m, {
+          from: 'bot',
+          text: `⚠️ Error rendering graph: ${e.message}. Try refreshing or checking the server logs.`,
+          timestamp: new Date(),
+          type: 'error'
+        }])
+      }
     }
-  }, [showGraph, messages])
+  }, [showGraph, graphType, fullGraphData])
+
+  const fetchFullKG = async () => {
+    setGraphLoading(true)
+    try {
+      const res = await fetch(`${API_URL}/api/kg/full`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      })
+      if (!res.ok) {
+        throw new Error(`Server error: ${res.status}`)
+      }
+      const data = await res.json()
+      if (data.error) {
+        throw new Error(data.error)
+      }
+      if (!data.nodes.length || !data.edges.length) {
+        throw new Error("Received empty knowledge graph data")
+      }
+      setFullGraphData(data)
+      setGraphType('full')
+      setShowGraph(true)
+    } catch (e) {
+      console.error("Failed to fetch full KG:", e)
+      setMessages(m => [...m, {
+        from: 'bot',
+        text: `⚠️ Failed to load full Knowledge Graph: ${e.message}. Please check the server at ${API_URL} and try again.`,
+        timestamp: new Date(),
+        type: 'error'
+      }])
+    } finally {
+      setGraphLoading(false)
+    }
+  }
 
   const send = async () => {
     if (!input.trim() || loading) return
@@ -99,6 +175,9 @@ export default function App() {
       }
       
       const data = await res.json()
+      if (data.error) {
+        throw new Error(data.error)
+      }
       const botText = formatResults(data)
       
       setMessages(m => [...m, {
@@ -111,7 +190,7 @@ export default function App() {
     } catch (e) {
       setMessages(m => [...m, {
         from: 'bot', 
-        text: `🔌 Connection Issue\n\nI'm having trouble connecting to the knowledge base. This could mean:\n\n• The server might be offline\n• Network connectivity issues\n• API endpoint not responding\n\nPlease check if the server is running at ${API_URL} and try again.`,
+        text: `🔌 Connection Issue\n\nI'm having trouble connecting to the knowledge base: ${e.message}\n\nPlease check if the server is running at ${API_URL} and try again.`,
         timestamp: new Date(),
         type: 'error'
       }])
@@ -216,8 +295,12 @@ export default function App() {
             <button className="graph-close-button" onClick={() => setShowGraph(false)}>
               Close
             </button>
-            <h3 className="graph-title">Knowledge Graph Visualization</h3>
-            <div ref={containerRef} className="graph-container" />
+            <h3 className="graph-title">{graphType === 'full' ? 'Full Knowledge Graph' : 'Query Knowledge Graph'}</h3>
+            {graphLoading ? (
+              <div className="graph-loading">Loading graph...</div>
+            ) : (
+              <div ref={containerRef} className="graph-container" />
+            )}
           </div>
         </div>
       )}
@@ -240,6 +323,9 @@ export default function App() {
               <MessageCircle size={16} />
               <span>{messages.length} messages</span>
             </div>
+            <button className="header-button" onClick={fetchFullKG} disabled={graphLoading}>
+              <Network size={16} /> {graphLoading ? 'Loading...' : 'View Full KG'}
+            </button>
           </div>
         </div>
       </header>
@@ -247,7 +333,6 @@ export default function App() {
       {/* Main Chat Container */}
       <main className="chat-container">
         <div className="chat-window">
-          
           {/* Messages Area */}
           <div className="messages-container">
             {messages.map((message, index) => (
@@ -269,7 +354,10 @@ export default function App() {
                       {message.kg_data?.visualization?.nodes?.length > 0 && (
                         <button
                           className="view-graph-button"
-                          onClick={() => setShowGraph(true)}
+                          onClick={() => {
+                            setGraphType('query')
+                            setShowGraph(true)
+                          }}
                         >
                           <Network size={16} /> View Knowledge Graph
                         </button>
