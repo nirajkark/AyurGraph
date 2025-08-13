@@ -12,3 +12,21 @@ requests
 python-dotenv
 langchain-groq
 langchain
+
+# Backend Dependencies (Python)
+
+rdflib
+flask
+flask-cors
+langchain-groq
+python-Levenshtein
+fuzzywuzzy
+python-dotenv
+
+# Frontend Dependencies (JavaScript/Node.js)
+
+react
+react-dom
+vis-network
+vis-data
+lucide-react
